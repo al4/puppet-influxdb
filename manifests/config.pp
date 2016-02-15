@@ -1,11 +1,19 @@
 # == Class: influxdb::config
 #
-# only values which are effectivly changed will be managed
-# More information on these settings available at:
-#   https://influxdb.com/docs/v0.9/administration/config.html
+# Any configuration in the specified config hash is managed as an ini_setting.
 #
 # DO NO CALL DIRECTLY
-class influxdb::config {
+class influxdb::config(
+  $settings = {
+    'meta' => {
+      'hostname' => "${influxdb::meta_hostname}",
+      'peers'    => "${influxdb::peers}",
+    },
+    'retention' => {
+      'replication' => "${influxdb::retention_replication}",
+    }
+  }
+){
 
   # defaults for all settings
   Ini_setting {
@@ -15,32 +23,19 @@ class influxdb::config {
 
   # specific changes
   ini_setting { 'reporting-disabled':
+    # reporting-disabled is a special case as it's top-level
     section => '',
     setting => 'reporting-disabled',
     value   => $influxdb::reporting_disabled,
   }
 
-  # [meta]
-  ini_setting { 'meta_hostname':
-    section => 'meta',
-    setting => 'hostname',
-    value   => "\"${influxdb::meta_hostname}\"",
-  }
-
-  if $influxdb::meta_peers != undef {
-    ini_setting { 'meta_peers':
-      section => 'meta',
-      setting => 'peers',
-      value   => $influxdb::meta_peers,
-    }
-  }
-
-  if $influxdb::retention_replication != undef {
-    # [retention]
-    ini_setting { 'retention_replication':
-      section => 'retention',
-      setting => 'replication',
-      value   => $influxdb::retention_replication,
+  $settings.each |$section| {
+    $section.each |$setting| {
+      ini_setting { "${section}_${setting}":
+        section => $section,
+        setting => $setting,
+        value   => $setting[0],
+      }
     }
   }
 
