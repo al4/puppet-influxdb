@@ -7,14 +7,22 @@ class influxdb::params {
   $config_file             = '/etc/opt/influxdb/influxdb.conf'
 
   $download_url            = undef
+
   # general section of influxdb.conf
   $reporting_disabled      = false
 
-  # [meta]
-  $meta_hostname           = 'localhost'
-  $meta_peers              = undef
+  # Configuration options defined in the module
+  $module_settings = {
+    'meta' => {
+      'hostname' => 'localhost',
+      'peers'    => undef,
+    },
+    'retention' => {
+      'replication' => undef,
+    }
+  }
 
-  # [retention]
-  $retention_replication   = undef
+  # User settings, empty hash by default
+  $settings = {}
 
 }

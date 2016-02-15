@@ -3,17 +3,7 @@
 # Any configuration in the specified config hash is managed as an ini_setting.
 #
 # DO NO CALL DIRECTLY
-class influxdb::config(
-  $settings = {
-    'meta' => {
-      'hostname' => "${influxdb::meta_hostname}",
-      'peers'    => "${influxdb::peers}",
-    },
-    'retention' => {
-      'replication' => "${influxdb::retention_replication}",
-    }
-  }
-){
+class influxdb::config {
 
   # defaults for all settings
   Ini_setting {
@@ -29,13 +19,20 @@ class influxdb::config(
     value   => $influxdb::reporting_disabled,
   }
 
-  $settings.each |$section| {
+  # Merge config hashes
+  $merged_settings = merge($::influxdb::params::module_settings, $::influxdb::settings)
+
+  $merged_settings.each |$section| {
     $section.each |$setting| {
-      ini_setting { "${section}_${setting}":
-        section => $section,
-        setting => $setting,
-        value   => $setting[0],
+
+      if $setting[0] != undef {
+        ini_setting { "${section}_${setting}":
+          section => $section,
+          setting => $setting,
+          value   => $setting[0],
+        }
       }
+
     }
   }
 
