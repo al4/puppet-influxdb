@@ -7,6 +7,7 @@ class influxdb (
   $reporting_disabled       = $influxdb::params::reporting_disabled,
   $download_url             = $influxdb::params::download_url,
   $settings                 = $influxdb::params::settings,
+  $module_settings          = $influxdb::params::module_settings,
 ) inherits influxdb::params {
 
   class { 'influxdb::install': } ->

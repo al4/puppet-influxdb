@@ -2,27 +2,27 @@
 # DO NOT CALL DIRECTLY
 class influxdb::params {
   $ensure                  = 'installed'
-  $version                 = '0.9.2'
+  $version                 = '0.13.0-1'
   $install_from_repository = true
-  $config_file             = '/etc/opt/influxdb/influxdb.conf'
+  $config_file             = '/etc/influxdb/influxdb.conf'
 
   $download_url            = undef
 
   # general section of influxdb.conf
   $reporting_disabled      = false
 
-  # Configuration options defined in the module
-  $module_settings = {
-    'meta' => {
-      'hostname' => 'localhost',
-      'peers'    => undef,
+  # User settings
+  $settings = {
+    meta => {
+      hostname => 'localhost',
+      peers    => undef,
     },
-    'retention' => {
-      'replication' => undef,
+    retention => {
+      replication => undef,
     }
   }
 
-  # User settings, empty hash by default
-  $settings = {}
+  # Module config. Separate, as the title is a different format.
+  $module_settings = {}
 
 }
