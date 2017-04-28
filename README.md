@@ -2,6 +2,13 @@
 
 [![Build Status](https://travis-ci.org/rplessl/puppet-influxdb.png)](https://travis-ci.org/rplessl/puppet-influxdb)
 
+## About this fork
+
+The original source of this module is no longer maintained, however when we started using it, it was the best option available and we've continued to use it at Gumtree. It has a couple of features that don't exist in the more popular influxdb modules; specifically it now supports the creation (but not modification) of databases, users and grants. The implementation isn't brilliant (simple exec calls to the influx command line), but works for us. YMMV.
+
+The configuration implementation is improved from the source module, but inferior to [golja/influxdb](https://forge.puppet.com/golja/influxdb).
+
+
 ## Description
 
 puppet module to install and configure [influxdb](https://influxdb.org) (version 0.9.x and newer). Tested with InfluxDB 0.9.1 and 0.9.2.
